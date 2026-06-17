@@ -30,7 +30,7 @@ class VotingSystem:
         ]
 
     #function that calculates distance between voter and candidate political leaning and ranks them for each voter ballet
-    def generate_ballots(self,count):
+    def generate_ballots(self):
         all_ballots = []
         for voter in self.voters:
             ballot = []
@@ -47,19 +47,17 @@ class VotingSystem:
 
         while True:
             pols = {candidate: 0 for candidate in self.candidates if candidate not in losers }
-            rank = []
-
+           
             #go through all first place votes
             for ballot in ballots:
-                #get first choice
                 for distance, candidate in ballot:
                     if candidate not in losers:
                         pols[candidate] += 1
                         break # if top choice is eliminated send vote to next highest choice
            
             total_votes = len(ballots)
-            pols = {candidate: (votes/total_votes)*100 for candidate, votes in pols.items()} #candidate % score
-            rank = sorted(pols, key=lambda k: pols[k], reverse=True) #candidate name sorted by % score
+            pols = {candidate: (votes/total_votes)*100 for candidate, votes in pols.items()} 
+            rank = sorted(pols, key=lambda k: pols[k], reverse=True) 
 
             print("Round: ",round)
             for candidate in rank:
@@ -69,18 +67,14 @@ class VotingSystem:
             round +=1
 
             #calculate % of highest voted candidate
-            top_candidate = max(pols, key = lambda k: pols[k])#candidate name
-            percentage = (pols[top_candidate]/total_votes )* 100 #candidate % score
+            top_candidate = rank[0]
+            percentage = pols[top_candidate]
 
             if percentage >= 50.0:
                 return top_candidate.name, percentage
             else:
-                loosing_candidate = min(pols, key = lambda k: pols[k])#candidate name
-                del pols[loosing_candidate]
-                #adding votes from loseing candidates to the voters
-                leftover_votes = 0
-                percentage = pols[top_candidate]/total_votes * 100 
-                losers.add(loosing_candidate)
+                losing_candidate = min(pols, key = lambda k: pols[k])
+                losers.add(losing_candidate)
         
 
 
