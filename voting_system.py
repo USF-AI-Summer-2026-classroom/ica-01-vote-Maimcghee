@@ -65,7 +65,6 @@ class VotingSystem:
             for candidate in rank:
                 print(f"{candidate.name}: {pols[candidate]:.2f}%")
             
-            print()
             round +=1
 
             #calculate % of highest voted candidate
