@@ -61,6 +61,7 @@ class VotingSystem:
             pols = {candidate: (votes/total_votes)*100 for candidate, votes in pols.items()} 
             rank = sorted(pols, key=lambda k: pols[k], reverse=True) 
 
+            print("\n")
             print("Round: ",round)
             for candidate in rank:
                 print(f"{candidate.name}: {pols[candidate]:.2f}%")
