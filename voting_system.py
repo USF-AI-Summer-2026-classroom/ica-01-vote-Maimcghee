@@ -85,14 +85,6 @@ if __name__ == "__main__":
     voting_system.generate_voters(100)
     ballots = voting_system.generate_ballots()
 
-    print("Candidates:")
-    for candidate in voting_system.candidates:
-        print(candidate)
-
-    print("\nVoters:")
-    for voter in voting_system.voters:
-        print(voter)
-
     print("\nElection Results:")
     winner = voting_system.run_election(ballots, 5)
     print("\nWinner:")
