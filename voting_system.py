@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     voting_system.generate_candidates(5)
     voting_system.generate_voters(100)
-    ballots = voting_system.generate_ballots(100)
+    ballots = voting_system.generate_ballots()
 
     print("Candidates:")
     for candidate in voting_system.candidates:
