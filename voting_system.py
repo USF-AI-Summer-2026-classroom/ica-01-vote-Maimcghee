@@ -1,14 +1,16 @@
+from ballot import Ballot
 from candidate import Candidate
 from voter import Voter
 
 import random
-import heapq
+
 
 
 class VotingSystem:
     def __init__(self):
         self.candidates = []
         self.voters = []
+        self.Allballots = []
 
     def generate_candidates(self, count):
         names = ['Aang', 'Katara', 'Sokka', 'Zuko', 'Iroh', 'Appa', 'Momo', 'Toph', 'Azula', 'Suki', 'Ozai', 'Mai', 'Ty']
@@ -31,26 +33,26 @@ class VotingSystem:
 
     #function that calculates distance between voter and candidate political leaning and ranks them for each voter ballet
     def generate_ballots(self):
-        all_ballots = []
-        for voter in self.voters:
-            ballot = []
-            for canidate in self.candidates:
-                #calculate distance
-                distance = abs(voter.leaning - canidate.leaning)
-                heapq.heappush(ballot, (distance,canidate))
-            all_ballots.append(ballot)
-        return all_ballots
+        self.Allballots = [
+            Ballot(
+                thisVoter = voter,
+                candidates = self.candidates
+            )
+            for voter in self.voters
+        ]
+        return self.Allballots
 
     def run_election(self,ballots,num_candidates):
         losers = set()
         round = 1
+        prev_pol = None
 
         while True:
             pols = {candidate: 0 for candidate in self.candidates if candidate not in losers }
            
             #go through all first place votes
             for ballot in ballots:
-                for distance, candidate in ballot:
+                for distance, candidate in ballot.rank:
                     if candidate not in losers:
                         pols[candidate] += 1
                         break # if top choice is eliminated send vote to next highest choice
@@ -71,10 +73,17 @@ class VotingSystem:
             percentage = pols[top_candidate]
 
             if percentage >= 50.0:
-                return top_candidate.name, percentage
+                #in case of a tie
+                winners = [candidate for candidate in pols if pols[candidate] == percentage]
+                if len(winners) > 1 and prev_pol:
+                    win = max(winners, key=lambda candidate: prev_pol[candidate])
+                else:
+                    win = top_candidate
+                return win.name, percentage
             else:
                 losing_candidate = min(pols, key = lambda k: pols[k])
                 losers.add(losing_candidate)
+                prev_pol = pols
         
 
 
